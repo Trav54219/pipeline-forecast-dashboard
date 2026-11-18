@@ -1,0 +1,237 @@
+{
+  "as_of": "2025-09-30",
+  "n_opps": 1800,
+  "weighted": {
+    "by_stage": {
+      "Qualify": {
+        "n": 42,
+        "amount": 1503200.0,
+        "weighted": 150320.0
+      },
+      "Discovery": {
+        "n": 46,
+        "amount": 1343400.0,
+        "weighted": 335850.0
+      },
+      "Proposal": {
+        "n": 29,
+        "amount": 928000.0,
+        "weighted": 464000.0
+      },
+      "Negotiation": {
+        "n": 15,
+        "amount": 384100.0,
+        "weighted": 288075.0
+      }
+    },
+    "total": {
+      "n": 132,
+      "amount": 4158700.0,
+      "weighted": 1238245.0
+    }
+  },
+  "categories": {
+    "by_category": {
+      "Commit": {
+        "n": 17,
+        "amount": 578600.0,
+        "weighted": 370325.0
+      },
+      "Best Case": {
+        "n": 23,
+        "amount": 642800.0,
+        "weighted": 321925.0
+      },
+      "Pipeline": {
+        "n": 92,
+        "amount": 2937300.0,
+        "weighted": 545995.0
+      }
+    },
+    "commit": 578600.0,
+    "best_case_cumulative": 1221400.0,
+    "pipeline_cumulative": 4158700.0
+  },
+  "conversion": [
+    {
+      "stage": "Qualify",
+      "reached": 1800,
+      "advanced": 1133,
+      "lost_here": 625,
+      "conversion": 0.6444823663253697
+    },
+    {
+      "stage": "Discovery",
+      "reached": 1133,
+      "advanced": 756,
+      "lost_here": 331,
+      "conversion": 0.6954921803127875
+    },
+    {
+      "stage": "Proposal",
+      "reached": 756,
+      "advanced": 517,
+      "lost_here": 210,
+      "conversion": 0.7111416781292985
+    },
+    {
+      "stage": "Negotiation",
+      "reached": 517,
+      "advanced": 387,
+      "lost_here": 115,
+      "conversion": 0.7709163346613546
+    }
+  ],
+  "win_rate": {
+    "won": 387,
+    "lost": 1281,
+    "win_rate": 0.23201438848920863,
+    "win_rate_amount": 0.20309989094118147,
+    "avg_won_amount": 27236.69250645995
+  },
+  "win_by_segment": {
+    "Enterprise": {
+      "won": 39,
+      "lost": 204,
+      "win_rate": 0.16049382716049382,
+      "win_rate_amount": 0.1610032762055284,
+      "avg_won_amount": 100302.56410256411
+    },
+    "Mid-Market": {
+      "won": 134,
+      "lost": 436,
+      "win_rate": 0.23508771929824562,
+      "win_rate_amount": 0.23420035352184335,
+      "avg_won_amount": 33321.64179104478
+    },
+    "SMB": {
+      "won": 214,
+      "lost": 641,
+      "win_rate": 0.25029239766081873,
+      "win_rate_amount": 0.25345265845915965,
+      "avg_won_amount": 10110.747663551401
+    }
+  },
+  "empirical_probs_now": {
+    "Qualify": 0.23201438848920863,
+    "Discovery": 0.3710450623202301,
+    "Proposal": 0.5435393258426966,
+    "Negotiation": 0.7709163346613546
+  },
+  "assumed_probs": {
+    "Qualify": 0.1,
+    "Discovery": 0.25,
+    "Proposal": 0.5,
+    "Negotiation": 0.75,
+    "Closed Won": 1.0,
+    "Closed Lost": 0.0
+  },
+  "backtest": [
+    {
+      "quarter": "2024Q1",
+      "n_deals": 74,
+      "pipeline": 2397300.0,
+      "forecast_static": 630050.0,
+      "forecast_empirical": 491646.70329670346,
+      "actual_won": 647400.0,
+      "err_static": -0.026799505715168367,
+      "err_empirical": -0.24058278761707838
+    },
+    {
+      "quarter": "2024Q2",
+      "n_deals": 89,
+      "pipeline": 2779100.0,
+      "forecast_static": 658940.0,
+      "forecast_empirical": 785402.1539170601,
+      "actual_won": 968000.0,
+      "err_static": -0.3192768595041322,
+      "err_empirical": -0.18863413851543376
+    },
+    {
+      "quarter": "2024Q3",
+      "n_deals": 87,
+      "pipeline": 2669500.0,
+      "forecast_static": 885230.0,
+      "forecast_empirical": 1081100.540903887,
+      "actual_won": 997500.0,
+      "err_static": -0.11255137844611529,
+      "err_empirical": 0.08381006606905966
+    },
+    {
+      "quarter": "2024Q4",
+      "n_deals": 70,
+      "pipeline": 2410300.0,
+      "forecast_static": 813620.0,
+      "forecast_empirical": 996742.0406592002,
+      "actual_won": 1120600.0,
+      "err_static": -0.27394253078707836,
+      "err_empirical": -0.11052825213349976
+    },
+    {
+      "quarter": "2025Q1",
+      "n_deals": 64,
+      "pipeline": 2031500.0,
+      "forecast_static": 558790.0,
+      "forecast_empirical": 724998.2567724477,
+      "actual_won": 1165600.0,
+      "err_static": -0.5205988332189431,
+      "err_empirical": -0.378004240929609
+    },
+    {
+      "quarter": "2025Q2",
+      "n_deals": 68,
+      "pipeline": 1439800.0,
+      "forecast_static": 444405.0,
+      "forecast_empirical": 571946.9902325027,
+      "actual_won": 524700.0,
+      "err_static": -0.15303030303030302,
+      "err_empirical": 0.09004572180770477
+    },
+    {
+      "quarter": "2025Q3",
+      "n_deals": 99,
+      "pipeline": 2741600.0,
+      "forecast_static": 935540.0,
+      "forecast_empirical": 1171598.8728627604,
+      "actual_won": 989600.0,
+      "err_static": -0.054628132578819724,
+      "err_empirical": 0.18391155301410717
+    }
+  ],
+  "backtest_summary": {
+    "mape_static": 0.20868964904008,
+    "mape_empirical": 0.18221668001235608,
+    "bias_static": -0.20868964904008,
+    "bias_empirical": -0.07999743975782134
+  },
+  "coverage": [
+    {
+      "quarter": "2025Q4",
+      "quota": 1150000,
+      "closed_won": 0,
+      "gap": 1150000,
+      "pipeline": 2892600.0,
+      "weighted": 991535.0,
+      "n": 99,
+      "coverage": 2.515304347826087,
+      "weighted_coverage": 0.8622043478260869,
+      "benchmark": 3.0
+    },
+    {
+      "quarter": "2026Q1",
+      "quota": 1200000,
+      "closed_won": 0,
+      "gap": 1200000,
+      "pipeline": 1214200.0,
+      "weighted": 207785.0,
+      "n": 30,
+      "coverage": 1.0118333333333334,
+      "weighted_coverage": 0.17315416666666666,
+      "benchmark": 3.0
+    }
+  ],
+  "past_due": {
+    "n": 3,
+    "amount": 51900.0
+  }
+}

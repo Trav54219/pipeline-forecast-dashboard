@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pipeline Forecast Dashboard (synthetic data)</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1c2430;--mute:#667085;--line:#e3e6eb;--a:#2f6fdb;--b:#e08a1e;--c:#2a9d8f;--d:#8e5bd1;--warn:#fff4d6}
+@media (prefers-color-scheme:dark){:root{--bg:#10151c;--card:#182029;--ink:#e8edf3;--mute:#9aa7b6;--line:#2a3441;--a:#6ea1ff;--b:#f0a84a;--c:#4fc5b6;--d:#b18af0;--warn:#3a3118}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:22px;margin:0 0 4px}.sub{color:var(--mute);margin:0 0 14px}
+.banner{background:var(--warn);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:16px;font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.kpi,.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .l{color:var(--mute);font-size:12px}.kpi .v{font-size:22px;font-weight:650;margin-top:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));gap:14px}
+.card h2{font-size:15px;margin:0 0 8px}.card p{color:var(--mute);font-size:12.5px;margin:6px 0 0}
+canvas{max-height:300px}table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:right}th:first-child,td:first-child{text-align:left}
+</style></head><body><main>
+<h1>Pipeline Forecast Dashboard</h1>
+<p class="sub">Snapshot as of <span id="asof"></span></p>
+<div class="banner"><strong>Synthetic data.</strong> Every opportunity here is randomly generated (seeded) by this repo. No real company, customer or result is represented. Stage probabilities and quotas are assumptions.</div>
+<section class="kpis" id="kpis"></section>
+<section class="grid">
+<div class="card"><h2>Open pipeline by stage</h2><canvas id="c1"></canvas><p>Weighted = amount x assumed stage probability.</p></div>
+<div class="card"><h2>Forecast categories (open)</h2><canvas id="c2"></canvas><p>Category is the rep-assigned flag on each open opportunity.</p></div>
+<div class="card"><h2>Stage conversion</h2><canvas id="c3"></canvas><p>Bars: resolved-only conversion to the next stage. Lines: assumed vs empirical win probability from that stage.</p></div>
+<div class="card"><h2>Backtest: forecast vs actual by quarter</h2><canvas id="c4"></canvas><p id="btnote"></p></div>
+<div class="card"><h2>Win rate by segment</h2><canvas id="c5"></canvas></div>
+<div class="card"><h2>Coverage vs quota</h2><table id="cov"></table><p>Coverage = open pipeline planned to close in the quarter / (quota - closed-won so far). The 3x benchmark is a rule of thumb.</p></div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const D = {"as_of": "2025-09-30", "kpi": {"open_pipeline": 4158700.0, "weighted": 1238245.0, "commit": 578600.0, "best_case": 1221400.0, "win_rate": 0.23201438848920863, "coverage": 2.515304347826087, "coverage_quarter": "2025Q4", "benchmark": 3.0, "past_due_n": 3, "past_due_amount": 51900.0}, "stages": ["Qualify", "Discovery", "Proposal", "Negotiation"], "stage_amount": [1503200.0, 1343400.0, 928000.0, 384100.0], "stage_weighted": [150320.0, 335850.0, 464000.0, 288075.0], "cats": ["Commit", "Best Case", "Pipeline"], "cat_amount": [578600.0, 642800.0, 2937300.0], "cat_weighted": [370325.0, 321925.0, 545995.0], "conv_stage": ["Qualify", "Discovery", "Proposal", "Negotiation"], "conv": [0.6444823663253697, 0.6954921803127875, 0.7111416781292985, 0.7709163346613546], "assumed": [0.1, 0.25, 0.5, 0.75], "empirical": [0.23201438848920863, 0.3710450623202301, 0.5435393258426966, 0.7709163346613546], "bt": [{"quarter": "2024Q1", "n_deals": 74, "pipeline": 2397300.0, "forecast_static": 630050.0, "forecast_empirical": 491646.70329670346, "actual_won": 647400.0, "err_static": -0.026799505715168367, "err_empirical": -0.24058278761707838}, {"quarter": "2024Q2", "n_deals": 89, "pipeline": 2779100.0, "forecast_static": 658940.0, "forecast_empirical": 785402.1539170601, "actual_won": 968000.0, "err_static": -0.3192768595041322, "err_empirical": -0.18863413851543376}, {"quarter": "2024Q3", "n_deals": 87, "pipeline": 2669500.0, "forecast_static": 885230.0, "forecast_empirical": 1081100.540903887, "actual_won": 997500.0, "err_static": -0.11255137844611529, "err_empirical": 0.08381006606905966}, {"quarter": "2024Q4", "n_deals": 70, "pipeline": 2410300.0, "forecast_static": 813620.0, "forecast_empirical": 996742.0406592002, "actual_won": 1120600.0, "err_static": -0.27394253078707836, "err_empirical": -0.11052825213349976}, {"quarter": "2025Q1", "n_deals": 64, "pipeline": 2031500.0, "forecast_static": 558790.0, "forecast_empirical": 724998.2567724477, "actual_won": 1165600.0, "err_static": -0.5205988332189431, "err_empirical": -0.378004240929609}, {"quarter": "2025Q2", "n_deals": 68, "pipeline": 1439800.0, "forecast_static": 444405.0, "forecast_empirical": 571946.9902325027, "actual_won": 524700.0, "err_static": -0.15303030303030302, "err_empirical": 0.09004572180770477}, {"quarter": "2025Q3", "n_deals": 99, "pipeline": 2741600.0, "forecast_static": 935540.0, "forecast_empirical": 1171598.8728627604, "actual_won": 989600.0, "err_static": -0.054628132578819724, "err_empirical": 0.18391155301410717}], "bt_summary": {"mape_static": 0.20868964904008, "mape_empirical": 0.18221668001235608, "bias_static": -0.20868964904008, "bias_empirical": -0.07999743975782134}, "seg": {"Enterprise": 0.16049382716049382, "Mid-Market": 0.23508771929824562, "SMB": 0.25029239766081873}, "coverage": [{"quarter": "2025Q4", "quota": 1150000, "closed_won": 0, "gap": 1150000, "pipeline": 2892600.0, "weighted": 991535.0, "n": 99, "coverage": 2.515304347826087, "weighted_coverage": 0.8622043478260869, "benchmark": 3.0}, {"quarter": "2026Q1", "quota": 1200000, "closed_won": 0, "gap": 1200000, "pipeline": 1214200.0, "weighted": 207785.0, "n": 30, "coverage": 1.0118333333333334, "weighted_coverage": 0.17315416666666666, "benchmark": 3.0}]};
+const $ = id => document.getElementById(id);
+const usd = v => v == null ? "n/a" : "$" + (v >= 1e6 ? (v/1e6).toFixed(2) + "M" : Math.round(v/1e3) + "k");
+const pct = v => v == null ? "n/a" : (v*100).toFixed(1) + "%";
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+$("asof").textContent = D.as_of;
+const k = D.kpi;
+[["Open pipeline", usd(k.open_pipeline)],["Weighted pipeline", usd(k.weighted)],["Commit", usd(k.commit)],
+ ["Best case (cum.)", usd(k.best_case)],["Win rate (count)", pct(k.win_rate)],
+ ["Coverage "+k.coverage_quarter, k.coverage==null?"n/a":k.coverage.toFixed(2)+"x"],
+ ["Past-due open deals", k.past_due_n+" / "+usd(k.past_due_amount)]
+].forEach(([l,v]) => $("kpis").insertAdjacentHTML("beforeend", `<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div></div>`));
+const A=css("--a"),B=css("--b"),C=css("--c"),Dd=css("--d"),mute=css("--mute"),line=css("--line");
+Chart.defaults.color = mute; Chart.defaults.borderColor = line;
+const money = {ticks:{callback:v=>usd(v)}};
+const tip = {callbacks:{label:c=>c.dataset.label+": "+(c.dataset.pct?pct(c.parsed.y):usd(c.parsed.y))}};
+new Chart($("c1"),{type:"bar",data:{labels:D.stages,datasets:[{label:"Pipeline",data:D.stage_amount,backgroundColor:A},{label:"Weighted",data:D.stage_weighted,backgroundColor:B}]},options:{scales:{y:money},plugins:{tooltip:tip}}});
+new Chart($("c2"),{type:"bar",data:{labels:D.cats,datasets:[{label:"Pipeline",data:D.cat_amount,backgroundColor:A},{label:"Weighted",data:D.cat_weighted,backgroundColor:B}]},options:{scales:{y:money},plugins:{tooltip:tip}}});
+const pc = {ticks:{callback:v=>pct(v)}};
+new Chart($("c3"),{data:{labels:D.conv_stage,datasets:[
+ {type:"bar",label:"Conversion to next stage",data:D.conv,backgroundColor:A,pct:1},
+ {type:"line",label:"Assumed win prob.",data:D.assumed,borderColor:B,backgroundColor:B,pct:1},
+ {type:"line",label:"Empirical win prob.",data:D.empirical,borderColor:C,backgroundColor:C,pct:1}]},options:{scales:{y:pc},plugins:{tooltip:tip}}});
+new Chart($("c4"),{data:{labels:D.bt.map(r=>r.quarter),datasets:[
+ {type:"bar",label:"Actual won",data:D.bt.map(r=>r.actual_won),backgroundColor:A},
+ {type:"line",label:"Forecast (assumed probs)",data:D.bt.map(r=>r.forecast_static),borderColor:B,backgroundColor:B},
+ {type:"line",label:"Forecast (empirical probs)",data:D.bt.map(r=>r.forecast_empirical),borderColor:C,backgroundColor:C}]},options:{scales:{y:money},plugins:{tooltip:tip}}});
+const s = D.bt_summary;
+$("btnote").textContent = "Mean abs. % error: assumed "+pct(s.mape_static)+", empirical "+pct(s.mape_empirical)+". Mean signed error (bias): assumed "+pct(s.bias_static)+", empirical "+pct(s.bias_empirical)+". Snapshot at quarter start; cohort = open deals planned to close that quarter.";
+new Chart($("c5"),{type:"bar",data:{labels:Object.keys(D.seg),datasets:[{label:"Win rate",data:Object.values(D.seg),backgroundColor:Dd,pct:1}]},options:{scales:{y:pc},plugins:{tooltip:tip,legend:{display:false}}}});
+$("cov").innerHTML = "<tr><th>Quarter</th><th>Quota</th><th>Closed won</th><th>Pipeline</th><th>Weighted</th><th>Coverage</th></tr>" +
+ D.coverage.map(c=>`<tr><td>${c.quarter}</td><td>${usd(c.quota)}</td><td>${usd(c.closed_won)}</td><td>${usd(c.pipeline)}</td><td>${usd(c.weighted)}</td><td>${c.coverage==null?"n/a":c.coverage.toFixed(2)+"x"}</td></tr>`).join("");
+</script></main></body></html>
